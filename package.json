@@ -1,21 +1,11 @@
 {
-  "name": "test-repo-ecr",
+  "name": "hatch-test-app",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/YHQZ1/AWS-ECR-test-repo.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/YHQZ1/AWS-ECR-test-repo/issues"
-  },
-  "homepage": "https://github.com/YHQZ1/AWS-ECR-test-repo#readme"
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }
