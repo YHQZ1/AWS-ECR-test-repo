@@ -1,29 +1,29 @@
-# -------- Stage 1: Build --------
+# ---------- Stage 1: Build ----------
 FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Install dependencies (cached layer)
+# Install dependencies (better caching)
 COPY package*.json ./
 RUN npm ci
 
-# Copy source code
+# Copy source
 COPY . .
 
-# Build → outputs to /dist (Vite default)
+# Build Vite app
 RUN npm run build
 
 
-# -------- Stage 2: Serve --------
-FROM nginx:alpine
+# ---------- Stage 2: Serve ----------
+FROM nginx:1.25-alpine
 
-# Remove default nginx static files
+# Remove default static files
 RUN rm -rf /usr/share/nginx/html/*
 
-# Copy built files from builder
+# Copy build output
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Copy custom nginx config (for SPA routing)
+# Add custom nginx config (SPA support)
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
