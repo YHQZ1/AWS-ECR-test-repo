@@ -1,26 +1,67 @@
-import { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useEffect, useState } from "react";
+
+// Dummy pages (replace with actual files later)
+function Home() {
+  return <h2>Home Page</h2>;
+}
+
+function Dashboard({ data }) {
+  return (
+    <div>
+      <h2>Dashboard</h2>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
+    </div>
+  );
+}
+
+function NotFound() {
+  return <h2>404 - Not Found</h2>;
+}
+
+// Layout wrapper
+function Layout({ children }) {
+  return (
+    <div>
+      <nav>
+        <a href="/">Home</a> | <a href="/dashboard">Dashboard</a>
+      </nav>
+      <main>{children}</main>
+    </div>
+  );
+}
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [data, setData] = useState(null);
 
-  const increment = () => setCount((prev) => prev + 1);
-  const decrement = () => setCount((prev) => prev - 1);
-  const reset = () => setCount(0);
+  // Simulated API call
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // replace with real API
+        const res = await Promise.resolve({
+          user: "Uttkarsh",
+          role: "Developer",
+        });
+        setData(res);
+      } catch (err) {
+        console.error("API error:", err);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
-    <div className="app-container">
-      <h1>React Counter</h1>
-
-      <div className="card">
-        <p>Count: {count}</p>
-
-        <div className="buttons">
-          <button onClick={increment}>+</button>
-          <button onClick={decrement}>-</button>
-          <button onClick={reset}>Reset</button>
-        </div>
-      </div>
-    </div>
+    <Router>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/dashboard" element={<Dashboard data={data} />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Layout>
+    </Router>
   );
 }
 
