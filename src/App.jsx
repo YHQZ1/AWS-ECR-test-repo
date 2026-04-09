@@ -1,12 +1,14 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-// Dummy pages (replace with actual files later)
+// Pages
 function Home() {
   return <h2>Home Page</h2>;
 }
 
-function Dashboard({ data }) {
+function Dashboard({ data, loading }) {
+  if (loading) return <p>Loading...</p>;
+
   return (
     <div>
       <h2>Dashboard</h2>
@@ -15,17 +17,24 @@ function Dashboard({ data }) {
   );
 }
 
+function Profile() {
+  return <h2>Profile Page</h2>;
+}
+
 function NotFound() {
   return <h2>404 - Not Found</h2>;
 }
 
-// Layout wrapper
+// Layout
 function Layout({ children }) {
   return (
     <div>
-      <nav>
-        <a href="/">Home</a> | <a href="/dashboard">Dashboard</a>
+      <nav style={{ display: "flex", gap: "10px" }}>
+        <Link to="/">Home</Link>
+        <Link to="/dashboard">Dashboard</Link>
+        <Link to="/profile">Profile</Link>
       </nav>
+      <hr />
       <main>{children}</main>
     </div>
   );
@@ -33,19 +42,23 @@ function Layout({ children }) {
 
 function App() {
   const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Simulated API call
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // replace with real API
-        const res = await Promise.resolve({
+        // Simulated API delay
+        await new Promise((res) => setTimeout(res, 500));
+
+        setData({
           user: "Uttkarsh",
-          role: "Developer",
+          role: "Full Stack Dev",
+          isLoggedIn: true,
         });
-        setData(res);
       } catch (err) {
         console.error("API error:", err);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -57,7 +70,11 @@ function App() {
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/dashboard" element={<Dashboard data={data} />} />
+          <Route
+            path="/dashboard"
+            element={<Dashboard data={data} loading={loading} />}
+          />
+          <Route path="/profile" element={<Profile />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Layout>
