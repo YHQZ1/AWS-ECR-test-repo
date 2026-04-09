@@ -75,7 +75,6 @@ function App() {
             element={<Dashboard data={data} loading={loading} />}
           />
           <Route path="/profile" element={<Profile />} />
-          <Route path="*" element={<NotFound />} />
         </Routes>
       </Layout>
     </Router>
